@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entidades.Interfases;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -9,54 +10,25 @@ namespace Entidades.Class
 {
     public class Usuario : Persona 
     {
-        private bool _activo;
-        private uint _id;
-        public uint Id {  get { return this._id; } private set { this._id = value; } }
-        public bool Activo {  get { return this._activo; } }
+        private int id;
+        public int Id { get { return this.id; }  set { this.id = value; } }
+        public int Id_vuelo { get;set; }
 
-        /// <summary>
-        ///  Se encarga de setearle un id al usuario
-        /// </summary>
-        private void CargarId()
+        public Usuario(int id,string nombre, string apellido, int edad, string genero,string correo,string password)
+            : base(nombre, apellido, edad, genero)
         {
-            uint idUsuario = this.BuscarId();
-            this.Id = idUsuario;
-        }
-        /// <summary>
-        /// Busca y retorna el id en la base de datos.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        private uint BuscarId()
+
+            this.Correo = correo;
+            this.Password = password;
+            this.Id = id;            
+        }       
+        public static bool operator ==(Usuario a, Usuario b)
         {
-            throw new NotImplementedException();
+            return a.Correo == b.Correo && a.Password == b.Password;
         }
-
-        
-
-        public Usuario(string nombre, string apellido, uint edad, uint dni,string correo,string password)
-            : base(nombre, apellido, edad, dni)
-        {            
-            if(base.CrearUsuario(correo, password))
-            {
-                this._activo = true;
-                this.CargarId();
-            }
-            else
-            {
-                this._activo = false;
-            }
-        }
-        
-        public void CambiarPassword(string passwordNew,string passwordOld)
+        public static bool operator !=(Usuario a, Usuario b)
         {
-            string passwordActual = this.Password;
-
-            if(!string.IsNullOrEmpty(passwordActual) && passwordOld == passwordActual) 
-            {
-                this.Password = passwordNew;
-            }
+            return !(a == b);
         }
-
     }
 }
