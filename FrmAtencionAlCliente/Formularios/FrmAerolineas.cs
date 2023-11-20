@@ -245,6 +245,7 @@ namespace FrmAtencionAlCliente
                     this.MostrarVuelos(this.listaDeAviones);
                 }
             }
+
             catch (DataBaseErrorException)
             {
                 MessageBox.Show("Error en la conexion en la base de datos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
