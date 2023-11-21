@@ -37,7 +37,7 @@ namespace MisTestUnitarios
         public void AlInvocarAlMetodoObtenerVueloPorId_SiSeLePasaUnIdQueSeEncuentraEnLaBaseDeDatosSeEsperaObetener_UnaAvionInstanciadoConElMismoId()
         {
             //Arrangue
-            int id = 231;            
+            int id = 301;            
             //Act
             Avion resultado = DBOAviones.ObtenerVueloPorId(id);
             //Assert          

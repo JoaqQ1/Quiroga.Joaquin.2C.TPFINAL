@@ -12,6 +12,9 @@ namespace FrmAtencionAlCliente
 {
     public partial class FrmAerolineas : Form
     {
+        private delegate void DelegateOptimizacion(List<Avion> lista);
+        //Evento
+        private event DelegateOptimizacion onOptimizacion;
         //Formularios
         private FrmLogin frmLog;
         private FrmCrearUsuario frmCrearUsario;
@@ -29,7 +32,6 @@ namespace FrmAtencionAlCliente
         public FrmAerolineas()
         {
             InitializeComponent();
-            this.rbLowCost.Checked = true;
         }
         private void FrmAerolineas_Load(object sender, EventArgs e)
         {
@@ -41,6 +43,8 @@ namespace FrmAtencionAlCliente
             this.timerTiempo.Interval = 1000;
             this.timerTiempo.Start();
             this.actualizacionDeVuelos = new Task(ActualizarVuelos, this.cancelarActualizacionDeVuelos.Token);
+            this.onOptimizacion += EliminarVuelos;
+
             Task.Run(() =>
             {
                 while (!this.cancelarActualizacionDeVuelos.IsCancellationRequested)
@@ -57,47 +61,53 @@ namespace FrmAtencionAlCliente
             try
             {
                 this.listaDeAviones = DBOAviones.GetVuelos();
-                DateTime ultimoVuelo = this.listaDeAviones.DevolverHorarioDeUltimoVuelo();
-                try
+                if (this.listaDeAviones.Count == 0)
                 {
-                    if (this.listaDeAviones.Count == 0 || ultimoVuelo > DateTime.Now)
-                    {
-                        this.listaDeAviones.ActualizarVuelos();
-                        DBOAviones.ActualizarVuelos(this.listaDeAviones);
-                        List<Avion>? nuevosVuelos = this.listaDeAviones.GeneradorDeVuelos();
-                        DBOAviones.AgregarAviones(nuevosVuelos);
-                        MessageBox.Show("Vuelos actualizados", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    List<Avion>? nuevosVuelos = this.listaDeAviones.GeneradorDeVuelos();
+                    DBOAviones.AgregarAviones(nuevosVuelos);
                 }
-                catch (Exception)
+                //Si la lista supera los 20 vuelos el evento onOptimizacion se encargara de eliminar los vuelos no disponibles.
+                if(this.listaDeAviones.Count > 20 && this.onOptimizacion is not null)
                 {
-                    MessageBox.Show("Error al actualizar los vuelos", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    List<Avion>? vuelosNodisponibles = DBOAviones.GetVuelosFiltrados("disponible","0");
+                    this.onOptimizacion.Invoke(vuelosNodisponibles);
+                }
+
+                DateTime ultimoVuelo = this.listaDeAviones.DevolverHorarioDeUltimoVuelo();
+               
+                //Si el ultimo vuelo ya salio se actualizara la lista de aviones creando nuevos vuelos
+                if (ultimoVuelo < DateTime.Now)
+                {
+                    this.listaDeAviones.ActualizarVuelos(DateTime.Now);
+
+                    //Se actualizara el estado de los aviones de disponibles a no disponibles
+                    DBOAviones.ActualizarVuelos(this.listaDeAviones);
+                    List<Avion>? nuevosVuelos = this.listaDeAviones.GeneradorDeVuelos();
+                    DBOAviones.AgregarAviones(nuevosVuelos);
+                    MessageBox.Show("Vuelos actualizados", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
 
             }
-            catch (DataBaseErrorException)
+            catch (Exception)
             {
-                MessageBox.Show("Error en la conexion con la base de datos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error al actualizar los vuelos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void MostrarVuelos(List<Avion> aviones)
         {
             if (aviones.Count == 0)
             {
-                MessageBox.Show("Error lista de aviones vacia", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error lista de aviones vacía", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
+                aviones.ActualizarVuelos(DateTime.Now);
                 foreach (Avion item in aviones)
                 {
-                    if (item.HoraDeSalida > DateTime.Now)
-                    {
-                        item.Disponible = false;
-                    }
-
                     this.lbVuelos.Items.Add(item);
                 }
             }
+
         }
 
         private void btnCrearUsuario_Click(object sender, EventArgs e)
@@ -122,6 +132,7 @@ namespace FrmAtencionAlCliente
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
+            // Al salir se cancela las actualizaciones de los vuelos
             this.cancelarActualizacionDeVuelos.Cancel();
             this.Close();
         }
@@ -129,7 +140,8 @@ namespace FrmAtencionAlCliente
 
         private void btnComprarVuelo_Click(object sender, EventArgs e)
         {
-            Avion avion = this.lbVuelos.SelectedItem as Avion;
+            //Se obtinene un vuelo seleccionado con el click
+            Avion? avion = this.lbVuelos.SelectedItem as Avion;
 
             if (avion == null || avion.Disponible == false)
             {
@@ -138,18 +150,21 @@ namespace FrmAtencionAlCliente
             else
             {
                 this.comprarVueloEnSecundario = new Task(() => { RealizaCompra(avion); });
+                //Se iniciara la tarea en secundario para realizar la compra del avion
                 this.comprarVueloEnSecundario.Start();
             }
 
         }
         private async void RealizaCompra(Avion avion)
         {
+            //Si requiere de inovcacion sera invocada la funcion
             if (this.InvokeRequired)
             {
                 this.BeginInvoke(() => RealizaCompra(avion));
             }
             else
             {
+                // Se corrobora que el usuario este seguro de comprar el vuelo
                 DialogResult respuesta = MessageBox.Show($"Seguro de que quiere comprar el vuelo a {avion.Destino} con un costo de ${avion.Costo}?", "?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (respuesta == DialogResult.Yes && !this.cancelarHiloCompra.IsCancellationRequested)
                 {
@@ -170,17 +185,19 @@ namespace FrmAtencionAlCliente
                             int horas = avion.HoraDeSalida.Hour - DateTime.Now.Hour;
                             int minutos = avion.HoraDeSalida.Minute - DateTime.Now.Minute;
 
-                            //Costo con aumento
-                            decimal precioBruto = avion.CalcularCostoConAumento();
-
-                            if ("Low cost" == this.DevolverClase())
-                            {
-                                precioBruto = (decimal)avion.Costo;
-                            }
 
                             //Use el await porque mi aplicacion no me dejaba interactuar con mi formulario correctamente con el metodo Task.Sleep()
                             await Task.Delay(4000);
-                            MessageBox.Show($"Su vuelo sale dentro de {horas}:{minutos:D2} y tuvo un costo de {precioBruto}", "Compro con exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            if (avion.Disponible)
+                            {
+                                MessageBox.Show($"Su vuelo sale dentro de {horas}:{minutos:D2} y tuvo un costo de {avion.Costo}", "Compro con exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                MessageBox.Show($"Su vuelo ya salio y tuvo un costo de {avion.Costo}", "Compro con exito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
+
                         }
                     }
                     catch (Exception)
@@ -191,28 +208,6 @@ namespace FrmAtencionAlCliente
                 }
             }
         }
-
-        private string DevolverClase()
-        {
-            string clase = string.Empty;
-
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(() => DevolverClase());
-            }
-            else
-            {
-                foreach (RadioButton item in this.gpbClase.Controls)
-                {
-                    if (item.Checked)
-                    {
-                        clase = item.Text;
-                    }
-                }
-            }
-            return clase;
-        }
-
 
         private void timerTiempo_Tick(object sender, EventArgs e)
         {
@@ -234,6 +229,7 @@ namespace FrmAtencionAlCliente
             {
                 this.lbVuelos.Items.Clear();
                 string pais = this.cbDestino.Text;
+                //Se filtraran los vuelos segun el pais seleccionado en el combo box destino
                 this.listaDeAviones = DBOAviones.GetVuelosFiltrados("destino", pais);
 
                 if (this.listaDeAviones.Count == 0)
@@ -248,7 +244,7 @@ namespace FrmAtencionAlCliente
 
             catch (DataBaseErrorException)
             {
-                MessageBox.Show("Error en la conexion en la base de datos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("No se encontraron vuelos con esas caracteristicas", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -287,5 +283,13 @@ namespace FrmAtencionAlCliente
             }
 
         }
+        private void EliminarVuelos(List<Avion> aviones)
+        {       
+            if (aviones.Count > 0)
+            {
+                DBOAviones.EliminarVuelos(aviones);
+            }
+        }
     }
+ 
 }

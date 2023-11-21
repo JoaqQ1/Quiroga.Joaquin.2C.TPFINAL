@@ -16,6 +16,7 @@ namespace Entidades.Class
         private int _horasDeVuelo;
         private DateTime _horaDeSalida;
         private bool disponible;       
+        
 
         public Avion(int id, string origen, string destino, double costo, int horasDeVuelo, DateTime horaDeSalida)
         {
@@ -34,17 +35,10 @@ namespace Entidades.Class
         public int HorasDeVuelo { get => this._horasDeVuelo; set => this._horasDeVuelo = value; }
         public DateTime HoraDeSalida { get => this._horaDeSalida; set => this._horaDeSalida = value; }
         public bool Disponible { get => this.disponible; set => this.disponible = value; }
-
-        public decimal CalcularCostoConAumento()
-        {
-            decimal porcentajeAdicional = 50.0m;
-            decimal porcentaje = porcentajeAdicional / 100.0m;
-            decimal aumento = (decimal)this.Costo * porcentaje;
-            return (decimal)this.Costo + aumento;
-        }
+              
         public override string ToString()
         {
-            string message = $"Vuelo de {this.Origen} a => {this.Destino} a las {this.HoraDeSalida.ToString("HH:mm:ss tt")}";
+            string message = $"✈️Vuelo de {this.Origen} a => {this.Destino} a las {this.HoraDeSalida.ToString("HH:mm:ss tt")} || USD${this.Costo} ✈️";
             if (!this.Disponible)
             {
                 message = $"Vuelo de {this.Origen} a => {this.Destino} || Ya no se encuentra disponible ||";

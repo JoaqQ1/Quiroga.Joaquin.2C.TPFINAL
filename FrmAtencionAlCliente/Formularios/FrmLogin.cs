@@ -15,7 +15,7 @@ namespace FrmAtencionAlCliente.Formularios
     public partial class FrmLogin : Form
     {
         public delegate void UsuarioDelegate(Usuario usuario);
-        private UsuarioDelegate OnUsuario;
+        private event UsuarioDelegate OnUsuario;
 
         private Usuario usuarioLogeado;
         public FrmLogin(UsuarioDelegate usuarioDelegado)

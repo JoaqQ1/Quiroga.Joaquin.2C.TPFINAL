@@ -95,8 +95,7 @@ namespace Entidades.Class.Archivos
             catch (ArchivoInvalidException)
             { 
                 return rtn;
-            }
-            
+            }            
         }
         /// <summary>
         /// Este se encarga de una coincidencia de acuerdo al metodo de busqueda y retornar la coincidencia del buscador en el archivo que se pasa por parametro

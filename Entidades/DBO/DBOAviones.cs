@@ -18,7 +18,59 @@ namespace Entidades.DBO
         {
             stringConnection = "Server=.;Database=Aerolinea;Trusted_Connection=True;";
         }
+        /// <summary>
+        /// Este metodo se encargar a de eliminar el vuelo con el id del avion pasado por parametro
+        /// </summary>
+        /// <param name="avion"></param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="ElementoNoEncontradoException"></exception>
+        private static void EliminarVuelo(Avion avion)
+        {
+            if (avion is null)
+            {
+                throw new IndexOutOfRangeException("No se aceptan ids negativos");
+            }
+            else
+            {
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection(stringConnection))
+                    {
+                        string query = $"DELETE FROM Aviones WHERE id_avion = @id";
 
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("id", avion.Id);
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new ElementoNoEncontradoException("Elemento no encontrado");
+                }
+
+            }
+        }
+        public static void EliminarVuelos(List<Avion> aviones)
+        {
+            foreach (Avion avion in aviones)
+            {
+                if (aviones.Count == 0)
+                {
+                    throw new ArgumentNullException("Lista vacia");
+                }
+                else
+                {
+                    DBOAviones.EliminarVuelo(avion);
+                }
+            }
+        }
+        /// <summary>
+        /// Esta funcion se encarga de actualizar el vuelo con el id del mismo, con los nuevos datos
+        /// </summary>
+        /// <param name="avion"></param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="ElementoNoEncontradoException"></exception>
         private static void ActualizarVuelo(Avion avion)
         {
             if (avion is null)
@@ -135,7 +187,7 @@ namespace Entidades.DBO
         {
             List<Avion> aviones = new List<Avion>();
             SqlConnection connection = new SqlConnection(stringConnection);
-            List<string> columnasPermitidas = new List<string> {"id_avion","origen", "destino","horas_de_vuelo","costo","hora_de_salida" };
+            List<string> columnasPermitidas = new List<string> {"id_avion","origen", "destino","horas_de_vuelo","costo","hora_de_salida","disponible" };
             
             if (columnasPermitidas.Contains(columna))
             {
@@ -247,7 +299,7 @@ namespace Entidades.DBO
                     cmd.Parameters.AddWithValue("destino", avion.Destino);
                     cmd.Parameters.AddWithValue("horas_de_vuelo", avion.HorasDeVuelo);
                     cmd.Parameters.AddWithValue("costo", avion.Costo);
-                    cmd.Parameters.AddWithValue("hora_de_salida", avion.HoraDeSalida.ToString("HH:mm:ss"));
+                    cmd.Parameters.AddWithValue("hora_de_salida", avion.HoraDeSalida);
                     cmd.Parameters.AddWithValue("disponible",avion.Disponible);
 
                     conn.Open();

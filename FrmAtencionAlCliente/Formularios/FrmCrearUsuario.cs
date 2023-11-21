@@ -48,17 +48,17 @@ namespace FrmAtencionAlCliente.Formularios
                 //                Creacion de Usuario                // 
 
                 this.usuarioModelo.Nombre = this.txtNombre.Text;
-                this.usuarioModelo.Apellido = this.txtApellido.Text;           
-                this.usuarioModelo.Genero = DevolverGenero();         
-                this.usuarioModelo.Edad =(int) this.udEdad.Value;
+                this.usuarioModelo.Apellido = this.txtApellido.Text;
+                this.usuarioModelo.Genero = DevolverGenero();
+                this.usuarioModelo.Edad = (int)this.udEdad.Value;
                 this.usuarioModelo.Correo = this.txtCorreo.Text;
                 this.usuarioModelo.Password = this.txtContraseña.Text;
-                
+
                 Usuario usuario = this.usuarioModelo.GetElement();
-                try 
+                try
                 {
                     List<Usuario> usuarios = ManejadorDeUsuario.DevolverListaDeUsuarios();
-                    if(usuarios.Count == 0 || !ManejadorDeUsuario.BuscarUsuarioEnArchivo(usuario))
+                    if (usuarios.Count == 0 || !ManejadorDeUsuario.BuscarUsuarioEnArchivo(usuario))
                     {
                         usuario.Id = ManejadorDeUsuario.GetUltimoIdUsuario();
                         usuarios.Add(usuario);
@@ -66,10 +66,10 @@ namespace FrmAtencionAlCliente.Formularios
                         MessageBox.Show($"Se puedo agregar correctamente el usuario al archivo", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
                     }
-                    else 
+                    else
                     {
-                        MessageBox.Show($"El usuario ya se encuentra registrado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                     
-                    }                    
+                        MessageBox.Show($"El usuario ya se encuentra registrado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
                 catch (Exception)
                 {

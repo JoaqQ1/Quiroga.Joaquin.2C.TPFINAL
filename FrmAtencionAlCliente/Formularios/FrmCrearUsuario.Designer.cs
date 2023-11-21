@@ -46,7 +46,6 @@ namespace FrmAtencionAlCliente.Formularios
             rdbFemenino = new RadioButton();
             rdbMasculino = new RadioButton();
             btnCrear = new Button();
-            btnGenerarRandom = new Button();
             grbDatos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)udEdad).BeginInit();
             grbGenero.SuspendLayout();
@@ -64,6 +63,7 @@ namespace FrmAtencionAlCliente.Formularios
             grbDatos.Controls.Add(lblEdad);
             grbDatos.Controls.Add(lblApellido);
             grbDatos.Controls.Add(lblNombre);
+            grbDatos.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
             grbDatos.Location = new Point(12, 12);
             grbDatos.Name = "grbDatos";
             grbDatos.Size = new Size(213, 211);
@@ -75,79 +75,84 @@ namespace FrmAtencionAlCliente.Formularios
             // 
             udEdad.Location = new Point(55, 98);
             udEdad.Name = "udEdad";
-            udEdad.Size = new Size(120, 23);
+            udEdad.Size = new Size(120, 21);
             udEdad.TabIndex = 9;
             // 
             // txtContraseña
             // 
             txtContraseña.Location = new Point(89, 155);
             txtContraseña.Name = "txtContraseña";
-            txtContraseña.Size = new Size(100, 23);
+            txtContraseña.Size = new Size(100, 21);
             txtContraseña.TabIndex = 8;
             // 
             // txtCorreo
             // 
             txtCorreo.Location = new Point(65, 126);
             txtCorreo.Name = "txtCorreo";
-            txtCorreo.Size = new Size(100, 23);
+            txtCorreo.Size = new Size(100, 21);
             txtCorreo.TabIndex = 7;
             // 
             // txtApellido
             // 
             txtApellido.Location = new Point(72, 66);
             txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(100, 23);
+            txtApellido.Size = new Size(100, 21);
             txtApellido.TabIndex = 6;
             // 
             // txtNombre
             // 
             txtNombre.Location = new Point(73, 35);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(100, 23);
+            txtNombre.Size = new Size(100, 21);
             txtNombre.TabIndex = 5;
             // 
             // lblContraseña
             // 
             lblContraseña.AutoSize = true;
+            lblContraseña.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
             lblContraseña.Location = new Point(16, 158);
             lblContraseña.Name = "lblContraseña";
-            lblContraseña.Size = new Size(67, 15);
+            lblContraseña.Size = new Size(73, 15);
             lblContraseña.TabIndex = 4;
             lblContraseña.Text = "Contraseña";
             // 
             // lblCorreo
             // 
             lblCorreo.AutoSize = true;
+            lblCorreo.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
             lblCorreo.Location = new Point(16, 129);
             lblCorreo.Name = "lblCorreo";
-            lblCorreo.Size = new Size(43, 15);
+            lblCorreo.Size = new Size(46, 15);
             lblCorreo.TabIndex = 3;
             lblCorreo.Text = "Correo";
             // 
             // lblEdad
             // 
             lblEdad.AutoSize = true;
+            lblEdad.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
             lblEdad.Location = new Point(16, 100);
             lblEdad.Name = "lblEdad";
-            lblEdad.Size = new Size(33, 15);
+            lblEdad.Size = new Size(35, 15);
             lblEdad.TabIndex = 2;
             lblEdad.Text = "Edad";
             // 
             // lblApellido
             // 
             lblApellido.AutoSize = true;
+            lblApellido.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
             lblApellido.Location = new Point(16, 66);
             lblApellido.Name = "lblApellido";
-            lblApellido.Size = new Size(51, 15);
+            lblApellido.Size = new Size(52, 15);
             lblApellido.TabIndex = 1;
             lblApellido.Text = "Apellido";
             // 
             // lblNombre
             // 
             lblNombre.AutoSize = true;
+            lblNombre.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
             lblNombre.Location = new Point(16, 35);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(51, 15);
+            lblNombre.Size = new Size(52, 15);
             lblNombre.TabIndex = 0;
             lblNombre.Text = "Nombre";
             // 
@@ -156,6 +161,7 @@ namespace FrmAtencionAlCliente.Formularios
             grbGenero.Controls.Add(rdbOtro);
             grbGenero.Controls.Add(rdbFemenino);
             grbGenero.Controls.Add(rdbMasculino);
+            grbGenero.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
             grbGenero.Location = new Point(231, 12);
             grbGenero.Name = "grbGenero";
             grbGenero.Size = new Size(145, 102);
@@ -168,7 +174,7 @@ namespace FrmAtencionAlCliente.Formularios
             rdbOtro.AutoSize = true;
             rdbOtro.Location = new Point(21, 70);
             rdbOtro.Name = "rdbOtro";
-            rdbOtro.Size = new Size(49, 19);
+            rdbOtro.Size = new Size(50, 19);
             rdbOtro.TabIndex = 2;
             rdbOtro.TabStop = true;
             rdbOtro.Text = "Otro";
@@ -179,7 +185,7 @@ namespace FrmAtencionAlCliente.Formularios
             rdbFemenino.AutoSize = true;
             rdbFemenino.Location = new Point(21, 45);
             rdbFemenino.Name = "rdbFemenino";
-            rdbFemenino.Size = new Size(78, 19);
+            rdbFemenino.Size = new Size(80, 19);
             rdbFemenino.TabIndex = 1;
             rdbFemenino.TabStop = true;
             rdbFemenino.Text = "Femenino";
@@ -190,7 +196,7 @@ namespace FrmAtencionAlCliente.Formularios
             rdbMasculino.AutoSize = true;
             rdbMasculino.Location = new Point(21, 22);
             rdbMasculino.Name = "rdbMasculino";
-            rdbMasculino.Size = new Size(80, 19);
+            rdbMasculino.Size = new Size(83, 19);
             rdbMasculino.TabIndex = 0;
             rdbMasculino.TabStop = true;
             rdbMasculino.Text = "Masculino";
@@ -198,29 +204,20 @@ namespace FrmAtencionAlCliente.Formularios
             // 
             // btnCrear
             // 
-            btnCrear.Location = new Point(12, 255);
+            btnCrear.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btnCrear.Location = new Point(12, 229);
             btnCrear.Name = "btnCrear";
-            btnCrear.Size = new Size(122, 64);
+            btnCrear.Size = new Size(367, 90);
             btnCrear.TabIndex = 3;
             btnCrear.Text = "Crear";
             btnCrear.UseVisualStyleBackColor = true;
             btnCrear.Click += btnCrear_Click;
-            // 
-            // btnGenerarRandom
-            // 
-            btnGenerarRandom.Location = new Point(254, 258);
-            btnGenerarRandom.Name = "btnGenerarRandom";
-            btnGenerarRandom.Size = new Size(122, 63);
-            btnGenerarRandom.TabIndex = 11;
-            btnGenerarRandom.Text = "Generar Random";
-            btnGenerarRandom.UseVisualStyleBackColor = true;
             // 
             // FrmCrearUsuario
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(391, 333);
-            Controls.Add(btnGenerarRandom);
             Controls.Add(btnCrear);
             Controls.Add(grbGenero);
             Controls.Add(grbDatos);
@@ -257,6 +254,5 @@ namespace FrmAtencionAlCliente.Formularios
         private RadioButton rdbFemenino;
         private RadioButton rdbMasculino;
         private Button btnCrear;
-        private Button btnGenerarRandom;
     }
 }

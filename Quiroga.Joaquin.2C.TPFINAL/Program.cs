@@ -14,11 +14,12 @@ namespace Quiroga.Joaquin._2C.TPFINAL
             try
             {
                 var aviones = DBOAviones.GetVuelos();
-                aviones.ActualizarVuelos();
+                //aviones.ActualizarVuelos();
                 foreach (var item in aviones)
                 {
                     Console.WriteLine($"{item} - {item.Disponible}");
                 }
+                //DBOAviones.ActualizarVuelos(aviones);
 
             }
             catch (Exception ex)

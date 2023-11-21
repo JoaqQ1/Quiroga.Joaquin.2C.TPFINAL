@@ -64,13 +64,27 @@ namespace Entidades.MetodosExtencion
             }
             return avionesNuevos;
         }
-        public static void ActualizarVuelos(this List<Avion> aviones)
+        public static void ActualizarVuelos(this List<Avion> aviones,DateTime horario)
         {
             foreach (Avion avion in aviones)
             {
-                avion.Disponible = false;
+                if (avion.HoraDeSalida < horario)
+                {
+                    avion.Disponible = false;
+                }     
+            }           
+        }
+        public static List<Avion> FiltrarLista(this List<Avion> aviones, Predicate<Avion> buscador)
+        {
+            List<Avion> lista = new List<Avion>();
+            foreach(Avion avion in aviones)
+            {
+                if(buscador(avion))
+                {
+                    lista.Add(avion);
+                }
             }
-           
+            return lista;
         }
     }
 }

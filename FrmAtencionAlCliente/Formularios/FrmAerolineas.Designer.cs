@@ -37,9 +37,6 @@
             btnConsultar = new Button();
             cbDestino = new ComboBox();
             cbOrigen = new ComboBox();
-            gpbClase = new GroupBox();
-            rbLowCost = new RadioButton();
-            rbPrimeraClase = new RadioButton();
             lblDestino = new Label();
             lblOrigen = new Label();
             btnComprarVuelo = new Button();
@@ -49,7 +46,6 @@
             btnLogearse = new Button();
             btnMostrarVueloComprado = new Button();
             grbConsultarVuelos.SuspendLayout();
-            gpbClase.SuspendLayout();
             SuspendLayout();
             // 
             // lblTiempo
@@ -84,7 +80,6 @@
             grbConsultarVuelos.Controls.Add(btnConsultar);
             grbConsultarVuelos.Controls.Add(cbDestino);
             grbConsultarVuelos.Controls.Add(cbOrigen);
-            grbConsultarVuelos.Controls.Add(gpbClase);
             grbConsultarVuelos.Controls.Add(lblDestino);
             grbConsultarVuelos.Controls.Add(lblOrigen);
             grbConsultarVuelos.Font = new Font("Arial", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
@@ -121,7 +116,7 @@
             cbDestino.DropDownStyle = ComboBoxStyle.DropDownList;
             cbDestino.FormattingEnabled = true;
             cbDestino.Items.AddRange(new object[] { "Brasil,", " Peru,", " Mexico, ", "Venezuela, ", "Uruguay, ", "Paraguay, ", "España" });
-            cbDestino.Location = new Point(75, 72);
+            cbDestino.Location = new Point(75, 112);
             cbDestino.Name = "cbDestino";
             cbDestino.Size = new Size(127, 24);
             cbDestino.TabIndex = 7;
@@ -131,48 +126,15 @@
             cbOrigen.DisplayMember = "aRGENTINA";
             cbOrigen.DropDownStyle = ComboBoxStyle.DropDownList;
             cbOrigen.Items.AddRange(new object[] { "Argentina" });
-            cbOrigen.Location = new Point(75, 33);
+            cbOrigen.Location = new Point(75, 46);
             cbOrigen.Name = "cbOrigen";
             cbOrigen.Size = new Size(127, 24);
             cbOrigen.TabIndex = 6;
             // 
-            // gpbClase
-            // 
-            gpbClase.Controls.Add(rbLowCost);
-            gpbClase.Controls.Add(rbPrimeraClase);
-            gpbClase.Location = new Point(6, 129);
-            gpbClase.Name = "gpbClase";
-            gpbClase.Size = new Size(153, 79);
-            gpbClase.TabIndex = 5;
-            gpbClase.TabStop = false;
-            gpbClase.Text = "Clase";
-            // 
-            // rbLowCost
-            // 
-            rbLowCost.AutoSize = true;
-            rbLowCost.Location = new Point(6, 47);
-            rbLowCost.Name = "rbLowCost";
-            rbLowCost.Size = new Size(81, 20);
-            rbLowCost.TabIndex = 1;
-            rbLowCost.TabStop = true;
-            rbLowCost.Text = "Low cost";
-            rbLowCost.UseVisualStyleBackColor = true;
-            // 
-            // rbPrimeraClase
-            // 
-            rbPrimeraClase.AutoSize = true;
-            rbPrimeraClase.Location = new Point(6, 21);
-            rbPrimeraClase.Name = "rbPrimeraClase";
-            rbPrimeraClase.Size = new Size(113, 20);
-            rbPrimeraClase.TabIndex = 0;
-            rbPrimeraClase.TabStop = true;
-            rbPrimeraClase.Text = "Primera clase";
-            rbPrimeraClase.UseVisualStyleBackColor = true;
-            // 
             // lblDestino
             // 
             lblDestino.AutoSize = true;
-            lblDestino.Location = new Point(6, 75);
+            lblDestino.Location = new Point(6, 115);
             lblDestino.Name = "lblDestino";
             lblDestino.Size = new Size(58, 16);
             lblDestino.TabIndex = 1;
@@ -181,7 +143,7 @@
             // lblOrigen
             // 
             lblOrigen.AutoSize = true;
-            lblOrigen.Location = new Point(6, 36);
+            lblOrigen.Location = new Point(6, 49);
             lblOrigen.Name = "lblOrigen";
             lblOrigen.Size = new Size(54, 16);
             lblOrigen.TabIndex = 0;
@@ -277,8 +239,6 @@
             Load += FrmAerolineas_Load;
             grbConsultarVuelos.ResumeLayout(false);
             grbConsultarVuelos.PerformLayout();
-            gpbClase.ResumeLayout(false);
-            gpbClase.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -291,9 +251,6 @@
         private GroupBox grbConsultarVuelos;
         private Label lblOrigen;
         private Label lblDestino;
-        private GroupBox gpbClase;
-        private RadioButton rbLowCost;
-        private RadioButton rbPrimeraClase;
         private Button btnConsultar;
         private ComboBox cbDestino;
         private ComboBox cbOrigen;
