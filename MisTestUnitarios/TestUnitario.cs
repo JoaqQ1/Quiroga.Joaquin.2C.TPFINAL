@@ -37,11 +37,12 @@ namespace MisTestUnitarios
         public void AlInvocarAlMetodoObtenerVueloPorId_SiSeLePasaUnIdQueSeEncuentraEnLaBaseDeDatosSeEsperaObetener_UnaAvionInstanciadoConElMismoId()
         {
             //Arrangue
-            int id = 301;            
+            int id = 360;            
             //Act
             Avion resultado = DBOAviones.ObtenerVueloPorId(id);
-            //Assert          
-            Assert.AreEqual( id,resultado.Id);
+            //Assert
+
+            Assert.AreEqual(id, resultado.Id);
         }
 
         //###########################################TEST DEL METODO EscribirArchivo() DE CLASE ESTATICA ManejadorDeArchivos###########################################//    

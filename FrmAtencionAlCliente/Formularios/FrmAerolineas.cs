@@ -12,6 +12,7 @@ namespace FrmAtencionAlCliente
 {
     public partial class FrmAerolineas : Form
     {
+        //Delegado
         private delegate void DelegateOptimizacion(List<Avion> lista);
         //Evento
         private event DelegateOptimizacion onOptimizacion;
@@ -61,6 +62,7 @@ namespace FrmAtencionAlCliente
             try
             {
                 this.listaDeAviones = DBOAviones.GetVuelos();
+                // Si la lista esta vacia se encargara de proporcionarle datos
                 if (this.listaDeAviones.Count == 0)
                 {
                     List<Avion>? nuevosVuelos = this.listaDeAviones.GeneradorDeVuelos();
