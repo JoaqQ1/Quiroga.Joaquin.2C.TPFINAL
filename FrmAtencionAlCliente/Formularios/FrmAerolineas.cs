@@ -27,7 +27,6 @@ namespace FrmAtencionAlCliente
         private Task comprarVueloEnSecundario;
         private CancellationTokenSource cancelarHiloCompra = new CancellationTokenSource();
         //Tareas en secundario actualizacion de la lista de vuelo
-        private Task actualizacionDeVuelos;
         private CancellationTokenSource cancelarActualizacionDeVuelos = new CancellationTokenSource();
 
         public FrmAerolineas()
@@ -43,9 +42,9 @@ namespace FrmAtencionAlCliente
             this.btnMostrarVueloComprado.Enabled = false;
             this.timerTiempo.Interval = 1000;
             this.timerTiempo.Start();
-            this.actualizacionDeVuelos = new Task(ActualizarVuelos, this.cancelarActualizacionDeVuelos.Token);
-            this.onOptimizacion += EliminarVuelos;
+            this.onOptimizacion += EliminarVuelosYUsuarios;
 
+            //El formulario se actualizara automaticamente una vez que le demos a motrar vuelos se mostran actualizados
             Task.Run(() =>
             {
                 while (!this.cancelarActualizacionDeVuelos.IsCancellationRequested)
@@ -71,7 +70,7 @@ namespace FrmAtencionAlCliente
                 //Si la lista supera los 20 vuelos el evento onOptimizacion se encargara de eliminar los vuelos no disponibles.
                 if(this.listaDeAviones.Count > 20 && this.onOptimizacion is not null)
                 {
-                    List<Avion>? vuelosNodisponibles = DBOAviones.GetVuelosFiltrados("disponible","0");
+                    List<Avion>? vuelosNodisponibles = DBOAviones.GetVuelosFiltrados("disponible","0");             
                     this.onOptimizacion.Invoke(vuelosNodisponibles);
                 }
 
@@ -244,7 +243,7 @@ namespace FrmAtencionAlCliente
                 }
             }
 
-            catch (DataBaseErrorException)
+            catch (Exception)
             {
                 MessageBox.Show("No se encontraron vuelos con esas caracteristicas", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -278,6 +277,10 @@ namespace FrmAtencionAlCliente
                 Avion avion = DBOAviones.ObtenerVueloPorId(this._usuario.Id_vuelo);
                 MessageBox.Show($"{avion}", "Vuelo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            }            
+            catch(ElementoNoEncontradoException)
+            {
+                MessageBox.Show($"Su vuelo ya salio y ya no se encuantra en la base de datos, lo sentimos", "Vuelo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception)
             {
@@ -285,7 +288,8 @@ namespace FrmAtencionAlCliente
             }
 
         }
-        private void EliminarVuelos(List<Avion> aviones)
+       
+        private void EliminarVuelosYUsuarios(List<Avion> aviones)
         {       
             if (aviones.Count > 0)
             {
