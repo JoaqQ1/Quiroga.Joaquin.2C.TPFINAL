@@ -10,16 +10,17 @@ namespace Entidades.MetodosExtencion
     {
         public static DateTime DevolverHorarioDeUltimoVuelo(this List<Avion> aviones)
         {
-            DateTime ultimoVuelo = DateTime.MinValue;
-            if( aviones is null ) 
+            DateTime ultimoVuelo = DateTime.Now;
+            if( aviones is null || aviones.Count == 0) 
             {
                 return ultimoVuelo;
             } 
             else 
             {
+                ultimoVuelo = aviones[0].HoraDeSalida;
                 foreach (Avion item in aviones)
                 {
-                    if (item.Disponible && item.HoraDeSalida > ultimoVuelo)
+                    if (item.HoraDeSalida > ultimoVuelo)
                     {
                         ultimoVuelo = item.HoraDeSalida;
                     }

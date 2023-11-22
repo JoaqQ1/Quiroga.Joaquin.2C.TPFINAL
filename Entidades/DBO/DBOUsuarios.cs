@@ -18,26 +18,74 @@ namespace Entidades.DBO
             stringConnection = "Server=.;Database=Aerolinea;Trusted_Connection=True;";
         }
 
-        public static bool BuscarCoincidencia(string columna,string value)
+
+        /// <summary>
+        /// Elimina un usuario de la base de datos.
+        /// </summary>
+        /// <param name="usuario">El usuario a ser eliminado.</param>
+        /// <exception cref="IndexOutOfRangeException">Se lanza si el usuario es nulo.</exception>
+        /// <exception cref="ElementoNoEncontradoException">Se lanza si ocurre un error durante la eliminación.</exception>
+        public static void EliminarUsuario(Usuario usuario)
         {
-            if(columna is null || value is null)
+            // Verificar si el usuario es nulo
+            if (usuario is null)
             {
-                throw new ArgumentNullException("Parametros nulos");
+                // Lanzar una excepción si el usuario es nulo
+                throw new IndexOutOfRangeException("No se aceptan usuarios nulos.");
             }
             else
             {
-                Usuario usuario = DBOUsuarios.GetUsuarioFiltrado(columna, value);
-                if(usuario is null)
+                try
                 {
-                    return false;
+                    // Conectar a la base de datos y ejecutar la eliminación
+                    using (SqlConnection conn = new SqlConnection(stringConnection))
+                    {
+                        string query = "DELETE FROM Usuarios WHERE id_usuario = @id";
+
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@id", usuario.Id);
+
+                        // Abrir la conexión y ejecutar el comando
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    return true;
+                    // Capturar excepciones y lanzar una excepción específica si ocurre un error durante la eliminación
+                    throw new ElementoNoEncontradoException("Elemento no encontrado durante la eliminación del usuario.");
                 }
             }
-            
         }
+
+
+        /// <summary>
+        /// Busca una coincidencia en la base de datos en función de una columna y un valor proporcionados.
+        /// </summary>
+        /// <param name="columna">El nombre de la columna en la que buscar la coincidencia.</param>
+        /// <param name="value">El valor a buscar en la columna especificada.</param>
+        /// <returns>
+        /// Devuelve true si se encuentra una coincidencia, de lo contrario, devuelve false.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Se lanza si alguno de los parámetros es nulo.</exception>
+        public static bool BuscarCoincidencia(string columna, string value)
+        {
+            // Verificar si alguno de los parámetros es nulo
+            if (columna is null || value is null)
+            {
+                // Lanzar una excepción si alguno de los parámetros es nulo
+                throw new ArgumentNullException("Los parámetros no pueden ser nulos.");
+            }
+            else
+            {
+                // Obtener un usuario filtrado de la base de datos
+                Usuario usuario = DBOUsuarios.GetUsuarioFiltrado(columna, value);
+
+                // Devolver true si se encuentra un usuario, de lo contrario, devolver false
+                return usuario is not null;
+            }
+        }
+
         /// <summary>
         /// Se encargar de devolverme un usuario con la coincidencia que se le indique en cuanto a la columna y el valor esperado el value
         /// </summary>

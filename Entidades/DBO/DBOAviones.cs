@@ -100,7 +100,7 @@ namespace Entidades.DBO
                         cmd.Parameters.AddWithValue("destino", avion.Destino);
                         cmd.Parameters.AddWithValue("horas_de_vuelo", avion.HorasDeVuelo);
                         cmd.Parameters.AddWithValue("costo", avion.Costo);
-                        cmd.Parameters.AddWithValue("hora_de_salida", avion.HoraDeSalida.ToString("HH:mm:ss"));
+                        cmd.Parameters.AddWithValue("hora_de_salida", avion.HoraDeSalida);
                         cmd.Parameters.AddWithValue("disponible", avion.Disponible);
                         
                         conn.Open();
